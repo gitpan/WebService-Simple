@@ -44,10 +44,10 @@ You can tell XML::Simple parse options as parameters.
 
 Yusuke Wada  C<< <yusuke@kamawada.com> >>
 
-
-=head1 LICENCE AND COPYRIGHT
+=head1 COPYRIGHT AND LISENCE
 
 Copyright (c) 2008 Yusuke Wada, All rights reserved.
 
-This module is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself. See L<perlartistic>.
+This module is free software; you can redistribute it
+and/or modify it under the same terms as Perl itself.
+See L<perlartistic>.
