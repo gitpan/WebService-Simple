@@ -1,19 +1,27 @@
+# $Id$
+
 package WebService::Simple::Response;
-
-use warnings;
 use strict;
-use Carp;
-use XML::Simple;
-our $VERSION = '0.01';
+use warnings;
+use base qw(HTTP::Response);
 
-sub HTTP::Response::parse_xml {
-    my ($self, $opt) = @_;
-    my $xs = XML::Simple->new( %$opt );
-    my $results;
-    eval { $results = $xs->XMLin($self->content) };
-    croak("can't parse xml") if ($@);
-    return $results;
+sub new_from_response
+{
+    # XXX hack. This probably should be changed...
+    my $class = shift;
+    my %args  = @_;
+    my $self = bless $args{response}, $class;
+    $self->{__parser} = $args{parser};
+    return $self;
 }
+
+sub parse_response
+{
+    my $self = shift;
+    return $self->{__parser}->parse_response($self);
+}
+
+*parse_xml = \&parse_response;
 
 1;
 
@@ -21,33 +29,35 @@ __END__
 
 =head1 NAME
 
-Webservice::Simple::Response - Adds a xml_parse() to HTTP::Response
+Webservice::Simple::Response - Adds a parse_response() to HTTP::Response
 
-=head1 VERSION
+=head1 SYNOPSIS
 
-This document describes Webservice::Simple::Response version 0.0.1
+  # Internal use only
 
 =head1 METHODS
 
-=over 4
+=head2 new_from_response
 
-=item parse_xml(I<%args>)
+=head2 parse_response
 
-Parse a xml content with XML::Simple and return the Perl object.
-You can tell XML::Simple parse options as parameters.
+Parses the response content using the specified parser
 
-  my $ref = $response->parse_xml( { forcearray => [], keyattr => [] } );
+=head2 parse_xml
 
-=back
+This is a n alias for parse_response() for backwards compatibility.
+Use parse_response instead.
 
 =head1 AUTHOR
 
 Yusuke Wada  C<< <yusuke@kamawada.com> >>
 
-=head1 COPYRIGHT AND LISENCE
+Daisuke Maki C<< <daisuke@endeworks.jp> >>
 
-Copyright (c) 2008 Yusuke Wada, All rights reserved.
+=head1 COPYRIGHT AND LICENSE
 
 This module is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
 See L<perlartistic>.
+
+=cut

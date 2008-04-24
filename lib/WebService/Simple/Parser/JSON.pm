@@ -1,0 +1,49 @@
+# $Id: JSON.pm 10287 2008-04-24 04:53:30Z daisuke $
+
+package WebService::Simple::Parser::JSON;
+use strict;
+use warnings;
+use base qw(WebService::Simple::Parser);
+use JSON 2.0;
+
+sub new
+{
+    my $class = shift;
+    my %args  = @_;
+
+    my $json  = delete $args{json} || JSON->new;
+    my $self  = $class->SUPER::new(%args);
+    $self->{json} = $json;
+    return $self;
+}
+
+sub parse_response
+{
+    my $self = shift;
+    $self->{json}->decode( $_[0]->content );
+}
+
+1;
+
+__END__
+
+=head1 NAME
+
+WebService::Simple::Parser::JSON - Parse JSON content
+
+=head1 SYNOPSIS
+
+  my $service = WebService::Simple->new(
+    base_url => ...,
+    response_parser => 'JSON',
+  );
+  my $res = $service->get(...);
+  my $json = $res->parse_response();
+
+=head1 METHODS
+
+=head2 new
+
+=head2 parse_response
+
+=cut
