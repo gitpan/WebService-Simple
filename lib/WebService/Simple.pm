@@ -10,7 +10,7 @@ use Digest::MD5 ();
 use WebService::Simple::Response;
 use UNIVERSAL::require;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 __PACKAGE__->config(
     base_url => '',
@@ -128,6 +128,8 @@ sub get
     @headers = @_;
 
     my $uri = URI->new($self->base_url);
+
+    $url =~ s!^/!! if $url =~ m!^/!;
     $uri->path( $uri->path . $url) if $url;
 
     # The url must be initialized with default parameters.
