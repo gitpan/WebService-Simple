@@ -1,4 +1,4 @@
-# $Id: JSON.pm 10287 2008-04-24 04:53:30Z daisuke $
+# $Id: JSON.pm 10404 2008-04-25 02:38:23Z yusukebe $
 
 package WebService::Simple::Parser::JSON;
 use strict;
@@ -20,7 +20,11 @@ sub new
 sub parse_response
 {
     my $self = shift;
-    $self->{json}->decode( $_[0]->content );
+    my $content =$_[0]->content;
+    # JSONP to pure JSON
+    $content =~ s/[a-zA-Z0-9_]+\((.+)\)/$1/;
+    $content =~ s/;$//;
+    $self->{json}->decode( $content );
 }
 
 1;
