@@ -1,4 +1,4 @@
-# $Id: Simple.pm 10287 2008-04-24 04:53:30Z daisuke $
+# $Id: Simple.pm 13005 2008-06-01 13:34:52Z yusukebe $
 
 package WebService::Simple::Parser::XML::Simple;
 use strict;
@@ -6,9 +6,18 @@ use warnings;
 use base qw(WebService::Simple::Parser);
 use XML::Simple;
 
-sub parse_response
-{
-    return XMLin($_[1]->content);
+sub new {
+    my $class = shift;
+    my %args  = @_;
+    my $xs    = delete $args{xs} || XML::Simple->new;
+    my $self  = $class->SUPER::new(%args);
+    $self->{xs} = $xs;
+    return $self;
+}
+
+sub parse_response {
+    my $self = shift;
+    $self->{xs}->XMLin( $_[0]->content );
 }
 
 1;
@@ -20,6 +29,8 @@ __END__
 WebService::Simple::Parser::XML::Simple - XML::Simple Adaptor For WebService::Simple::Parser
 
 =head1 METHODS
+
+=head2 new
 
 =head2 parse_response
 

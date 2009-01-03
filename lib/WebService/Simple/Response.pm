@@ -7,20 +7,19 @@ use base qw(HTTP::Response);
 
 our $VERSION = "0.02";
 
-sub new_from_response
-{
+sub new_from_response {
+
     # XXX hack. This probably should be changed...
     my $class = shift;
     my %args  = @_;
-    my $self = bless $args{response}, $class;
+    my $self  = bless $args{response}, $class;
     $self->{__parser} = $args{parser};
     return $self;
 }
 
-sub parse_response
-{
+sub parse_response {
     my $self = shift;
-    return $self->{__parser}->parse_response($self);
+    return $self->{__parser}->parse_response( $self );
 }
 
 *parse_xml = \&parse_response;
