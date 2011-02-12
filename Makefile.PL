@@ -20,9 +20,9 @@ recommends( 'XML::Parser::Lite::Tree' );
 recommends( 'XML::Parser::Lite::Tree::XPath' );
 recommends( 'XML::Feed' );
 
-build_requires( 'Test::More' );
-build_requires( 'Test::Pod' );
-build_requires( 'Pod::Coverage' );
+test_requires( 'Test::More' );
+
+tests 't/*.t';
 
 auto_include;
 WriteAll;

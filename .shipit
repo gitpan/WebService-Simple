@@ -1,5 +1,0 @@
-# auto-generated shipit config file.
-#steps = FindVersion, ChangeVersion, CheckChangeLog, DistTest, Commit, Tag, MakeDist,  UploadCPAN
-steps = MakeDist,  UploadCPAN
-svn.tagpattern = release-%v
-
