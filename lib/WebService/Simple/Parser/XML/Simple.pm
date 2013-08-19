@@ -1,4 +1,4 @@
-# $Id: Simple.pm 13005 2008-06-01 13:34:52Z yusukebe $
+# $Id$
 
 package WebService::Simple::Parser::XML::Simple;
 use strict;

@@ -23,6 +23,9 @@ recommends( 'XML::Feed' );
 test_requires( 'Test::More', => 0.94 ); # subtest
 
 tests 't/*.t';
+author_tests 'xt/*.t';
+
+auto_set_repository;
 
 auto_include;
 WriteAll;

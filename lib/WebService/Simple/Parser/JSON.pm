@@ -1,4 +1,4 @@
-# $Id: JSON.pm 26994 2008-12-18 03:11:11Z drry $
+# $Id$
 
 package WebService::Simple::Parser::JSON;
 use strict;
