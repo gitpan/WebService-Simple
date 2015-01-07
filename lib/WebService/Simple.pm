@@ -7,10 +7,11 @@ use Data::Dumper ();
 use Digest::MD5  ();
 use URI::Escape;
 use URI::QueryParam;
+use HTTP::Message;
 use WebService::Simple::Response;
 use UNIVERSAL::require;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 __PACKAGE__->config(
     base_url        => '',
@@ -25,8 +26,6 @@ sub new {
       || Carp::croak("base_url is required");
     $base_url = URI->new($base_url);
     my $basic_params = delete $args{params} || delete $args{param} || {};
-    $base_url->query_form_hash($basic_params);
-
     my $debug = delete $args{debug} || 0;
 
     my $response_parser = delete $args{response_parser}
@@ -76,6 +75,8 @@ sub new {
     return $self;
 }
 
+sub _agent       { "libwww-perl/$LWP::VERSION+". __PACKAGE__ .'/'.$VERSION }
+
 sub base_url        { $_[0]->{base_url} }
 sub basic_params    { $_[0]->{basic_params} }
 sub response_parser { $_[0]->{response_parser} }
@@ -120,7 +121,7 @@ sub request_url {
     my $self = shift;
     my %args = @_;
     
-    my $uri = ref($args{url}) =~ m/^URI/ ? $args{url}->clone() : URI->new($args{uri});
+    my $uri = ref($args{url}) =~ m/^URI/ ? $args{url}->clone() : URI->new($args{url});
     if ( my $extra_path = $args{extra_path} ) {
         $extra_path =~ s!^/!!;
         $uri->path( $uri->path . $extra_path );
@@ -133,10 +134,9 @@ sub request_url {
 
 sub get {
     my $self = shift;
-    my ( $url, $extra );
+    my ($url, $extra) = ("", {});
 
     if ( ref $_[0] eq 'HASH' ) {
-        $url   = "";
         $extra = shift @_;
     }
     else {
@@ -147,14 +147,16 @@ sub get {
     }
 
     my $uri = $self->request_url(
-        url        => $self->base_url,
+        url => $self->base_url,
         extra_path => $url,
-        params     => $extra
+        params => { %$extra, %{$self->basic_params} }
     );
 
     warn "Request URL is $uri\n" if $self->{debug};
 
     my @headers = @_;
+    my $can_accept = HTTP::Message::decodable();
+    push @headers, ('Accept-Encoding' => $can_accept);
 
     my $response;
     $response = $self->__cache_get( [ $uri, @headers ] );
@@ -183,7 +185,7 @@ sub get {
 
 sub post {
     my $self = shift;
-    my ( $url, $extra ) = ( '', undef );
+    my ( $url, $extra ) = ( '', {} );
 
     if ( ref $_[0] eq 'HASH' ) { # post(\%arg [, @header ])
         $extra = shift @_;
@@ -199,7 +201,7 @@ sub post {
     my $uri = $self->request_url(
         url        => $self->base_url,
         extra_path => $url,
-        params => $extra
+        params => { %$extra, %{$self->basic_params} }
     );
     my $content = $uri->query_form_hash();
     $uri->query_form(undef);
@@ -249,7 +251,7 @@ WebService::Simple - Simple Interface To Web Services APIs
 
 WebService::Simple is a simple class to interact with web services.
 
-It's basically an LWP::UserAgent that remembers recurring api URLs and
+It's basically an LWP::UserAgent that remembers recurring API URLs and
 parameters, plus sugar to parse the results.
 
 =head1 METHODS
@@ -288,13 +290,16 @@ Send POST request.
 
 =item request_url(I<$extra_path, $args>)
 
-Return reequest URL.
+Return request URL.
 
 =item base_url
 
 =item basic_params
 
 =item cache
+
+Each request is prepended by an optional cache look-up. If you supply a cache
+object upon new(), the module will look into the cache first.
 
 =item response_parser
 
@@ -360,7 +365,7 @@ including this module:
         WebService::Simple::Parser::XML::Simple->new( xs => $xs ),
   );
 
-This allows great flexibility in handling different webservices
+This allows great flexibility in handling different Web Services
 
 =head1 CACHING
 

@@ -1,4 +1,9 @@
+Build.PL
 Changes
+LICENSE
+META.json
+README.md
+cpanfile
 example/flickr_echo.pl
 example/flickr_json.pl
 example/flickr_search.pl
@@ -6,18 +11,6 @@ example/flickr_search_liteparser.pl
 example/google_search.pl
 example/hatenastar_jsonp.pl
 example/lingr.pl
-inc/Module/Install.pm
-inc/Module/Install/AuthorTests.pm
-inc/Module/Install/Base.pm
-inc/Module/Install/Can.pm
-inc/Module/Install/Fetch.pm
-inc/Module/Install/Include.pm
-inc/Module/Install/Makefile.pm
-inc/Module/Install/Metadata.pm
-inc/Module/Install/Repository.pm
-inc/Module/Install/Win32.pm
-inc/Module/Install/WriteAll.pm
-inc/Test/More.pm
 lib/WebService/Simple.pm
 lib/WebService/Simple/Parser.pm
 lib/WebService/Simple/Parser/JSON.pm
@@ -26,10 +19,6 @@ lib/WebService/Simple/Parser/XML/LibXML.pm
 lib/WebService/Simple/Parser/XML/Lite.pm
 lib/WebService/Simple/Parser/XML/Simple.pm
 lib/WebService/Simple/Response.pm
-Makefile.PL
-MANIFEST
-META.yml
-README
 t/00_load.t
 t/01_api_get.t
 t/01_api_post.t
@@ -43,3 +32,5 @@ t/02_parser_xml_feed.t
 t/02_parser_xml_simple.t
 xt/pod-coverage.t
 xt/pod.t
+META.yml
+MANIFEST
