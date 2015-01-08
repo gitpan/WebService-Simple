@@ -34,7 +34,7 @@
       },
       "configure" : {
          "requires" : {
-            "Module::Build" : "0.38"
+            "Module::Build::Tiny" : "0.035"
          }
       },
       "develop" : {
@@ -59,7 +59,9 @@
             "Class::Inspector" : "0",
             "Data::Dumper" : "0",
             "Digest::MD5" : "0",
+            "Hash::MultiValue" : "0",
             "JSON" : "2.0",
+            "LWP::Protocol::https" : "0",
             "LWP::UserAgent" : "0",
             "UNIVERSAL::require" : "0",
             "URI" : "1.36",
@@ -70,7 +72,7 @@
    "provides" : {
       "WebService::Simple" : {
          "file" : "lib/WebService/Simple.pm",
-         "version" : "0.22"
+         "version" : "0.23"
       },
       "WebService::Simple::Parser" : {
          "file" : "lib/WebService/Simple/Parser.pm"
@@ -92,7 +94,7 @@
       },
       "WebService::Simple::Response" : {
          "file" : "lib/WebService/Simple/Response.pm",
-         "version" : "0.22"
+         "version" : "0.23"
       }
    },
    "release_status" : "stable",
@@ -106,7 +108,8 @@
          "web" : "https://github.com/yusukebe/WebService-Simple"
       }
    },
-   "version" : "0.22",
+   "version" : "0.23",
+   "x_authority" : "cpan:YUSUKEBE",
    "x_contributors" : [
       "Daisuke Maki <dmaki@cpan.org>",
       "mattn <mattn.jp@gmail.com>",

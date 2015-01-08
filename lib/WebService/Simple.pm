@@ -8,10 +8,11 @@ use Digest::MD5  ();
 use URI::Escape;
 use URI::QueryParam;
 use HTTP::Message;
+use Hash::MultiValue;
 use WebService::Simple::Response;
 use UNIVERSAL::require;
 
-our $VERSION = '0.22';
+our $VERSION = '0.23';
 
 __PACKAGE__->config(
     base_url        => '',
@@ -127,7 +128,13 @@ sub request_url {
         $uri->path( $uri->path . $extra_path );
     }
     if($args{params}) {
-        $uri->query_form(%{$args{params}}, $uri->query_form());
+        if(ref $args{params} eq 'Hash::MultiValue') {
+            for my $key ($args{params}->keys) {
+                $uri->query_param_append($key, $args{params}->get($key));
+            }
+        }else{
+            $uri->query_form(%{$args{params}});
+        }
     }
     return $uri;
 }
@@ -149,7 +156,7 @@ sub get {
     my $uri = $self->request_url(
         url => $self->base_url,
         extra_path => $url,
-        params => { %$extra, %{$self->basic_params} }
+        params => Hash::MultiValue->new(%{$self->basic_params}, %$extra),
     );
 
     warn "Request URL is $uri\n" if $self->{debug};
@@ -199,9 +206,9 @@ sub post {
     }
 
     my $uri = $self->request_url(
-        url        => $self->base_url,
+        url => $self->base_url,
         extra_path => $url,
-        params => { %$extra, %{$self->basic_params} }
+        params => Hash::MultiValue->new(%{$self->basic_params}, %$extra),
     );
     my $content = $uri->query_form_hash();
     $uri->query_form(undef);

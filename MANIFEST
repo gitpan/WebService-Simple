@@ -19,6 +19,7 @@ lib/WebService/Simple/Parser/XML/LibXML.pm
 lib/WebService/Simple/Parser/XML/Lite.pm
 lib/WebService/Simple/Parser/XML/Simple.pm
 lib/WebService/Simple/Response.pm
+minil.toml
 t/00_load.t
 t/01_api_get.t
 t/01_api_post.t
